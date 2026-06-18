@@ -2,8 +2,13 @@ class ShoppingCart {
     constructor() {
         this.items = [];
     }
+
+    addItem(price) {
+        this.items.push(price);
+    }
+
     getTotal() {
-        return 0;
+        return this.items.reduce((sum, price) => sum + price, 0);
     }
 }
 
