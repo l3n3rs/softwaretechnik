@@ -3,13 +3,13 @@ class ShoppingCart {
         this.items = [];
     }
 
-    addItem(price) {
-        this.items.push(price);
+    addItem(itemPrice) {
+        this.items.push(itemPrice);
     }
 
     getTotal() {
-        return this.items.reduce((sum, price) => sum + price, 0);
+        return this.items.reduce((sum, itemPrice) => sum + itemPrice, 0);
     }
 }
 
-module.exports = { ShoppingCart };
+module.exports = ShoppingCart;
