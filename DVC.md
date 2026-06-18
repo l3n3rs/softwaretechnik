@@ -4,7 +4,7 @@
 siehe hier
 
 ## 2. Push eigenes Projekt
-Noch work in progress - kommt mit den kommenden Abgaben
+Noch work in progress - kommt mit den kommenden Abgaben. Siehe jetzt z.B. Beginn für die Aufgabe Vibe Coding.
 
 ## 3. Methoden testen
 ### push
@@ -20,6 +20,7 @@ Noch work in progress - kommt mit den kommenden Abgaben
 <img width="682" height="74" alt="grafik" src="https://github.com/user-attachments/assets/e793245f-4352-49fb-a52d-8b06fc031d03" />
 
 ### diff
+<img width="1021" height="227" alt="grafik" src="https://github.com/user-attachments/assets/f32a6b3f-3c50-4f1c-ab7c-5a4b97cacbc7" />
 
 ### status
 <img width="599" height="137" alt="grafik" src="https://github.com/user-attachments/assets/b901e992-3b17-455e-9cf5-19f306b6efaa" />
