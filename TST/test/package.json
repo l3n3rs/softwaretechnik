@@ -1,0 +1,11 @@
+{
+  "name": "Tests für Warenkorb & Förderung",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2"
+  }
+}
