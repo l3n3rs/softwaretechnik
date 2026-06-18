@@ -1,9 +1,8 @@
 # Übersicht
 Alles Mögliche für das Modul Softwaretechnik bisher:
 * [Alles für die Abgabe DVC](https://github.com/edlich/education/pull/575)
+* [Alles für die Abgabe TST](https://github.com/l3n3rs/softwaretechnik/tree/main/TST)
 * erste Sachen fürs Vibe Coding
-* erste Sachen für Requirements Engineering
-* erste Sachen für Analyse
 
-Stand: 25.04.22026
+Stand: 18.06.2026
 
