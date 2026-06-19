@@ -18,6 +18,8 @@ class ShoppingCart {
     getItems() {
         return this.items;
     }
+
+
 }
 
 module.exports = {

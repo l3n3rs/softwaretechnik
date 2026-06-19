@@ -27,3 +27,11 @@ test("Anzahl an Items", () => {
     console.log(cart.getItems());
     expect(cart.getItemCount()).toBe(3);
 });
+
+test("Name eines Items", () => {
+    const cart = new ShoppingCart();
+    cart.addItem("Apfel", 5);
+
+    expect(cart.getItems()).toEqual([{ name: "Apfel", price: 5 }
+    ])
+});
