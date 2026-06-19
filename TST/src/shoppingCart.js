@@ -19,9 +19,10 @@ class ShoppingCart {
         return this.items;
     }
 
-
+    getSpecificItemCount(itemName) {
+        return this.items.filter((item) => item.name === itemName).length;
+    }
 }
-
 module.exports = {
     ShoppingCart
 };

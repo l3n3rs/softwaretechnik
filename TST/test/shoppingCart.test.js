@@ -45,4 +45,4 @@ test("Anzahl eines bestimmten Items", () => {
     cart.addItem("Apfel", 5);
     expect(cart.getSpecificItemCount("Apfel")).toBe(3);
 
-})
+});
