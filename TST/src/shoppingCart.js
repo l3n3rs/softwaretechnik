@@ -3,12 +3,12 @@ class ShoppingCart {
         this.items = [];
     }
 
-    addItem(itemPrice) {
-        this.items.push(itemPrice);
+    addItem(name, price) {
+        this.items.push({ name: name, price: price });
     }
 
     getTotal() {
-        return this.items.reduce((sum, itemPrice) => sum + itemPrice, 0);
+        return this.items.reduce((sum, item) => sum + item.price, 0);
     }
 
     getItemCount() {

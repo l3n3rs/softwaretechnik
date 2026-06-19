@@ -7,23 +7,23 @@ test("Warenkorb hat Wert von 0", () => {
 
 test("Ein Item zum Warenkorb hinzufügen, Warenkorbwert erhöht sich", () => {
     const cart = new ShoppingCart();
-    cart.addItem(5);
+    cart.addItem("Apfel", 5);
     expect(cart.getTotal()).toBe(5);
 });
 
 test("Mehrere Items wurden zum Warenkorb hinzugefügt", () => {
     const cart = new ShoppingCart();
-    cart.addItem(5);
-    cart.addItem(5);
-    cart.addItem(5);
-    expect(cart.getTotal()).toBe(15);
+    cart.addItem("Apfel", 5);
+    cart.addItem("Banane", 3);
+    cart.addItem("Kiwi", 2);
+    expect(cart.getTotal()).toBe(10);
 });
 
 test("Anzahl an Items", () => {
     const cart = new ShoppingCart();
-    cart.addItem(5);
-    cart.addItem(5);
-    cart.addItem(5);
+    cart.addItem("Apfel", 5);
+    cart.addItem("Banane", 3);
+    cart.addItem("Kiwi", 2);
     console.log(cart.getItems());
     expect(cart.getItemCount()).toBe(3);
 });
