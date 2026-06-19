@@ -11,7 +11,7 @@ class ShoppingCart {
         return this.items.reduce((sum, item) => sum + item.price, 0);
     }
 
-    getItemCount() {
+    getTotalItemCount() {
         return this.items.length;
     }
 

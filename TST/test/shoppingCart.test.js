@@ -25,7 +25,7 @@ test("Anzahl an Items", () => {
     cart.addItem("Banane", 3);
     cart.addItem("Kiwi", 2);
     console.log(cart.getItems());
-    expect(cart.getItemCount()).toBe(3);
+    expect(cart.getTotalItemCount()).toBe(3);
 });
 
 test("Name eines Items", () => {
@@ -35,3 +35,14 @@ test("Name eines Items", () => {
     expect(cart.getItems()).toEqual([{ name: "Apfel", price: 5 }
     ])
 });
+
+test("Anzahl eines bestimmten Items", () => {
+    const cart = new ShoppingCart();
+    cart.addItem("Apfel", 5);
+    cart.addItem("Banane", 3);
+    cart.addItem("Apfel", 5);
+    cart.addItem("Kiwi", 2);
+    cart.addItem("Apfel", 5);
+    expect(cart.getSpecificItemCount("Apfel")).toBe(3);
+
+})
