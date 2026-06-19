@@ -10,6 +10,10 @@ class ShoppingCart {
     getTotal() {
         return this.items.reduce((sum, itemPrice) => sum + itemPrice, 0);
     }
+
+    getItemCount() {
+        return this.items.length;
+    }
 }
 
 module.exports = {

@@ -24,5 +24,5 @@ test("Anzahl an Items", () => {
     cart.addItem(5);
     cart.addItem(5);
     cart.addItem(5);
-    expect(cart.getItemCount).toBe(3);
+    expect(cart.getItemCount()).toBe(3);
 });
