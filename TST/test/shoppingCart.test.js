@@ -24,5 +24,6 @@ test("Anzahl an Items", () => {
     cart.addItem(5);
     cart.addItem(5);
     cart.addItem(5);
+    console.log(cart.getItems());
     expect(cart.getItemCount()).toBe(3);
 });

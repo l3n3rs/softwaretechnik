@@ -14,6 +14,10 @@ class ShoppingCart {
     getItemCount() {
         return this.items.length;
     }
+
+    getItems() {
+        return this.items;
+    }
 }
 
 module.exports = {
