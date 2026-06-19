@@ -18,3 +18,11 @@ test("Mehrere Items wurden zum Warenkorb hinzugefügt", () => {
     cart.addItem(5);
     expect(cart.getTotal()).toBe(15);
 });
+
+test("Anzahl an Items", () => {
+    const cart = new ShoppingCart();
+    cart.addItem(5);
+    cart.addItem(5);
+    cart.addItem(5);
+    expect(cart.getItemCount).toBe(3);
+});
