@@ -4,7 +4,7 @@ class ShoppingCart {
     }
 
     addItem(name, price) {
-        this.items.push({ name: name, price: price });
+        this.items.push({ name, price });
     }
 
     getTotal() {
