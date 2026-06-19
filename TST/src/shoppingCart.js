@@ -12,4 +12,6 @@ class ShoppingCart {
     }
 }
 
-module.exports = ShoppingCart;
+module.exports = {
+    ShoppingCart
+};
