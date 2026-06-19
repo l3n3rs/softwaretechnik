@@ -1,4 +1,4 @@
-const { ShoppingCart } = require("../src/shoppingCart.js");
+const { ShoppingCart } = require("./src/shoppingCart.js");
 
 test("Warenkorb hat Wert von 0", () => {
     const cart = new ShoppingCart();
