@@ -20,7 +20,17 @@ class ShoppingCart {
     }
 
     getSpecificItemCount(itemName) {
-        return this.items.filter((item) => item.name === itemName).length;
+        let count = 0;
+
+        for (const item of this.items) {
+            if (item.name === itemName) {
+                count++;
+            }
+        }
+
+        console.log(`${itemName}: ${count}`);
+
+        return count;
     }
 }
 module.exports = {
