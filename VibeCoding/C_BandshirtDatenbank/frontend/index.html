@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!--
+    Diese Datei ist die Startseite des Frontends.
+
+    Sie enthaelt nur die sichtbare Struktur der Anwendung:
+    - Formular zum Anlegen einer Band
+    - Such-, Filter- und Sortierbereich
+    - Bandliste
+    - Detailansicht
+
+    Die eigentliche Logik steht in frontend/js/app.js.
+    Das Aussehen steht in frontend/css/globals.css und den vorhandenen
+    Style-Dateien.
+-->
+<html lang="de">
+
+<head>
+    <!-- UTF-8 erlaubt Umlaute. Im Code verwenden wir trotzdem meistens ae/oe/ue,
+         damit die Dateien in verschiedenen Editoren robust lesbar bleiben. -->
+    <meta charset="UTF-8">
+
+    <!-- Diese Zeile sorgt dafuer, dass die Seite auch auf kleinen Bildschirmen
+         nicht wie eine Desktop-Seite herausgezoomt wird. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bandshirt-Datenbank</title>
+
+    <!-- Die CSS-Dateien werden getrennt geladen:
+         fonts.css: Schriften
+         theme.css: Farben und Design-Variablen
+         globals.css: konkrete Layout-Regeln fuer diese HTML-Seite -->
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/globals.css">
+</head>
+
+<body>
+    <!-- Kopfbereich der Anwendung. Er zeigt Name, Prototyp-Status und den
+         aktuell angemeldeten Nutzer. In einer echten Anwendung kaeme dieser
+         Nutzername spaeter aus einem Login-System. -->
+    <header class="app-header">
+        <div>
+            <p class="eyebrow">Vereinsverwaltung</p>
+            <h1>Bandshirt-Datenbank</h1>
+        </div>
+        <div class="user-area">
+            <label>
+                Angemeldeter Nutzer
+                <input id="current-user" type="text" value="Max Muster">
+            </label>
+            <span class="system-badge">Frontend Prototyp</span>
+        </div>
+    </header>
+
+    <!-- Hauptbereich mit drei Spalten: Formular, Liste und Detailansicht. -->
+    <main class="app-layout">
+        <!-- Linke Spalte: Hier werden neue Bands angelegt. -->
+        <section class="panel">
+            <div class="panel-header">
+                <h2>Band anlegen</h2>
+            </div>
+
+            <!-- Das Formular wird in app.js abgefangen. Die Seite wird beim
+                 Speichern also nicht neu geladen. -->
+            <form id="band-form" class="band-form">
+                <label>
+                    Primaerer Bandname
+                    <input id="primary-name" name="primaryName" type="text" required placeholder="z. B. Beispielband">
+                </label>
+
+                <label>
+                    Sekundaere Bandnamen
+                    <input id="secondary-names" name="secondaryNames" type="text" placeholder="durch Komma trennen">
+                </label>
+
+                <label>
+                    Recherche-Status
+                    <select id="research-status" name="researchStatus">
+                        <option value="UNRECHERCHIERT">unrecherchiert</option>
+                        <option value="GRUEN">gruen</option>
+                        <option value="GELB">gelb</option>
+                        <option value="ROT">rot</option>
+                    </select>
+                </label>
+
+                <label>
+                    Quellen / Links
+                    <input id="sources" name="sources" type="text" placeholder="durch Komma trennen">
+                </label>
+
+                <label>
+                    Kommentar
+                    <textarea id="comment" name="comment" rows="4" placeholder="Kurze Notiz zur Recherche"></textarea>
+                </label>
+
+                <!-- Der Ersteller wird nicht mehr manuell eingegeben.
+                     app.js nimmt automatisch den Namen aus #current-user. -->
+                <button type="submit">Band speichern</button>
+            </form>
+        </section>
+
+        <!-- Mittlere Spalte: Hier werden Bands gesucht, gefiltert, sortiert
+             und als Liste angezeigt. -->
+        <section class="panel">
+            <div class="panel-header">
+                <h2>Banduebersicht</h2>
+                <span id="band-count" class="counter">0 Bands</span>
+            </div>
+
+            <!-- Die Steuerelemente veraendern nur die angezeigte Liste.
+                 Die gespeicherten Bands selbst bleiben unveraendert. -->
+            <div class="list-controls">
+                <label>
+                    Suche nach Bandnamen
+                    <input id="search-input" type="search" placeholder="primaerer oder sekundaerer Name">
+                </label>
+
+                <label>
+                    Status filtern
+                    <select id="status-filter">
+                        <option value="ALLE">alle Status</option>
+                        <option value="UNRECHERCHIERT">unrecherchiert</option>
+                        <option value="GRUEN">gruen</option>
+                        <option value="GELB">gelb</option>
+                        <option value="ROT">rot</option>
+                    </select>
+                </label>
+
+                <label>
+                    Sortieren nach
+                    <select id="sort-select">
+                        <option value="BANDNAME">Bandname alphabetisch</option>
+                        <option value="LETZTE_AENDERUNG">letzter Aenderung</option>
+                        <option value="STATUS">Status</option>
+                    </select>
+                </label>
+
+                <!-- Exportiert die komplette gespeicherte Liste, nicht nur die
+                     aktuell gefilterte Ansicht. -->
+                <div class="export-actions">
+                    <button id="export-csv" type="button">CSV exportieren</button>
+                    <button id="export-xls" type="button">XLS exportieren</button>
+                </div>
+            </div>
+
+            <!-- app.js erzeugt die Karten in diesem Container dynamisch. -->
+            <div id="band-list" class="band-list"></div>
+        </section>
+
+        <!-- Rechte Spalte: Detailansicht fuer die aktuell ausgewaehlte Band. -->
+        <section class="panel detail-panel">
+            <div class="panel-header">
+                <h2>Detailansicht</h2>
+            </div>
+            <div id="band-detail" class="band-detail empty-state">
+                Noch keine Band ausgewaehlt.
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript wird am Ende geladen, damit die HTML-Elemente vorher schon
+         existieren und per document.querySelector gefunden werden koennen. -->
+    <script src="js/app.js"></script>
+</body>
+
+</html>

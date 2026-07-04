@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--
+  Einfache ToDo-Webanwendung ohne Framework.
+  Diese Datei kann direkt im Browser geöffnet werden.
+-->
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo Manager</title>
+
+    <!-- Theme-Dateien aus dem css-Ordner werden vor dem eigenen Styling geladen. -->
+    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="css/theme.css" />
+
+    <!-- Externe CSS-Datei für das konkrete Styling der ToDo-Anwendung. -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <!-- Kopfbereich mit Titel und kurzer Einordnung der App. -->
+      <header class="app__header">
+        <h1>ToDo Manager</h1>
+        <p>Aufgaben lokal speichern, abhaken und wieder löschen.</p>
+      </header>
+
+      <!-- Formular zum Hinzufügen neuer Aufgaben mit Pflichtangaben. -->
+      <form id="todo-form" class="todo-form">
+        <div class="todo-form__field todo-form__field--wide">
+          <label for="todo-input">Neue Aufgabe</label>
+          <input
+            id="todo-input"
+            type="text"
+            placeholder="z. B. Projektstruktur dokumentieren"
+            autocomplete="off"
+            required
+          />
+        </div>
+
+        <div class="todo-form__field">
+          <label for="priority-input">Priorität</label>
+          <select id="priority-input" required>
+            <option value="high">Hoch</option>
+            <option value="medium" selected>Mittel</option>
+            <option value="low">Niedrig</option>
+          </select>
+        </div>
+
+        <div class="todo-form__field">
+          <label for="due-date-input">Fälligkeitsdatum</label>
+          <input id="due-date-input" type="date" required />
+        </div>
+
+        <div class="todo-form__actions">
+          <button type="submit">Hinzufügen</button>
+        </div>
+      </form>
+
+      <!-- Bereich für Statusinformationen, Sortierung und Filter. -->
+      <section class="todo-toolbar" aria-label="Aufgabenübersicht">
+        <p id="todo-counter">0 offene Aufgaben</p>
+
+        <div class="todo-controls">
+          <label for="sort-select">Sortieren</label>
+          <select id="sort-select">
+            <option value="created">Neueste zuerst</option>
+            <option value="dueDate">Fälligkeitsdatum</option>
+            <option value="priority">Priorität</option>
+          </select>
+
+          <label for="priority-filter">Prio filtern</label>
+          <select id="priority-filter">
+            <option value="all">Alle</option>
+            <option value="high">Hoch</option>
+            <option value="medium">Mittel</option>
+            <option value="low">Niedrig</option>
+          </select>
+
+          <button id="clear-done-button" type="button">Erledigte löschen</button>
+        </div>
+      </section>
+
+      <!-- Hier rendert JavaScript die gespeicherten Aufgaben. -->
+      <ul id="todo-list" class="todo-list" aria-label="ToDo-Liste"></ul>
+    </main>
+
+    <!-- Externe JavaScript-Datei mit der gesamten App-Logik. -->
+    <script src="js/script.js"></script>
+  </body>
+</html>

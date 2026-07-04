@@ -1,0 +1,240 @@
+/*
+  Grundlayout der ToDo-App.
+  Dieses Styling nutzt die Variablen aus css/theme.css, damit sich die App am abgelegten Stil orientiert.
+*/
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  color: var(--foreground);
+  background: var(--background);
+}
+
+/* Zentriert die App und begrenzt die Breite für bessere Lesbarkeit. */
+.app {
+  width: min(94vw, 900px);
+  margin: 48px auto;
+  padding: 32px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 45px rgba(17, 17, 17, 0.08);
+}
+
+.app__header {
+  margin-bottom: 28px;
+}
+
+.app__header h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  font-weight: var(--font-weight-medium);
+}
+
+.app__header p {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+/* Formularbereich für neue Aufgaben. */
+.todo-form {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.6fr) minmax(140px, 0.8fr) minmax(170px, 0.8fr) auto;
+  gap: 12px;
+  align-items: end;
+  padding: 18px;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.todo-form__field {
+  display: grid;
+  gap: 6px;
+}
+
+.todo-form label,
+.todo-controls label {
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-medium);
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--foreground);
+  background: var(--input-background);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 2px);
+}
+
+input:focus,
+select:focus {
+  outline: 3px solid rgba(61, 90, 255, 0.18);
+  border-color: var(--ring);
+}
+
+button {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 10px 14px;
+  font: inherit;
+  font-weight: var(--font-weight-medium);
+  color: var(--primary-foreground);
+  background: var(--primary);
+  border: 0;
+  border-radius: calc(var(--radius) - 2px);
+}
+
+button:hover {
+  filter: brightness(1.08);
+}
+
+button:focus-visible {
+  outline: 3px solid rgba(61, 90, 255, 0.22);
+  outline-offset: 2px;
+}
+
+/* Übersicht mit Zähler, Sortierung, Filter und Aktion für erledigte Aufgaben. */
+.todo-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 24px 0 14px;
+}
+
+.todo-toolbar p {
+  min-width: max-content;
+  margin: 0 0 11px;
+  color: var(--muted-foreground);
+}
+
+.todo-controls {
+  display: grid;
+  grid-template-columns: auto minmax(150px, 1fr) auto minmax(130px, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  width: min(100%, 680px);
+}
+
+.todo-controls button {
+  color: var(--secondary-foreground);
+  background: var(--muted);
+  border: 1px solid var(--border);
+}
+
+/* Liste der Aufgaben. */
+.todo-list {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.todo-item {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+.todo-item input {
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+}
+
+.todo-item__content {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.todo-item__text {
+  overflow-wrap: anywhere;
+}
+
+.todo-item__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+}
+
+.todo-item__priority,
+.todo-item__date {
+  padding: 3px 8px;
+  background: var(--secondary);
+  border-radius: 999px;
+}
+
+/* Prioritäten erhalten dezente, aber schnell erkennbare Farben. */
+.todo-item--high {
+  border-left-color: var(--destructive);
+}
+
+.todo-item--medium {
+  border-left-color: var(--accent);
+}
+
+.todo-item--low {
+  border-left-color: #1f9d55;
+}
+
+/* Erledigte Aufgaben werden visuell abgesetzt. */
+.todo-item--done {
+  opacity: 0.68;
+}
+
+.todo-item--done .todo-item__text {
+  text-decoration: line-through;
+}
+
+.todo-item__delete {
+  color: var(--destructive-foreground);
+  background: var(--destructive);
+}
+
+/* Kleine Bildschirme bekommen ein einspaltiges Layout. */
+@media (max-width: 760px) {
+  .app {
+    margin: 20px auto;
+    padding: 20px;
+  }
+
+  .todo-form,
+  .todo-toolbar,
+  .todo-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .todo-toolbar p {
+    margin: 0;
+  }
+
+  .todo-item {
+    grid-template-columns: 22px minmax(0, 1fr);
+  }
+
+  .todo-item__delete {
+    grid-column: 1 / -1;
+  }
+}
