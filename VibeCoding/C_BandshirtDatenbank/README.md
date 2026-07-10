@@ -31,6 +31,18 @@ eine statische HTML/CSS/JavaScript-Oberflaeche, das Backend besteht aus
 verstaendlichen Java-Klassen und die Datenbank wird durch eine SQL-Datei
 beschrieben.
 
+## Verteilte Architektur
+
+Das Projekt enthaelt jetzt zwei getrennte Prozesse:
+
+- `backend`: Backend/API-Prozess fuer Bandverwaltung und Export-Anfragen
+- `export-service`: separater Prozess fuer das Abarbeiten von Export-Jobs
+
+Die Prozesse kommunizieren ueber die gemeinsame Datei `shared/export-jobs.csv`.
+Das Backend schreibt dort Export-Auftraege hinein. Der Export-Service liest
+offene Auftraege, erstellt CSV-Dateien in `shared/exports/` und markiert die
+Auftraege danach als erledigt.
+
 Weitere Funktionen im Frontend-Prototyp:
 
 - Die komplette Bandliste kann als CSV-Datei oder einfache XLS-Datei exportiert werden.

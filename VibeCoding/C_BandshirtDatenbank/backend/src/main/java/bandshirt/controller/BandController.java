@@ -3,8 +3,10 @@ package bandshirt.controller;
 import bandshirt.model.ActivityLogEntry;
 import bandshirt.model.Band;
 import bandshirt.model.BandSortierung;
+import bandshirt.model.ExportJob;
 import bandshirt.model.ResearchStatus;
 import bandshirt.service.BandService;
+import bandshirt.service.ExportRequestService;
 
 import java.util.List;
 
@@ -24,9 +26,11 @@ import java.util.List;
  */
 public class BandController {
     private final BandService bandService;
+    private final ExportRequestService exportRequestService;
 
-    public BandController(BandService bandService) {
+    public BandController(BandService bandService, ExportRequestService exportRequestService) {
         this.bandService = bandService;
+        this.exportRequestService = exportRequestService;
     }
 
     public Band createBand(String primaererName, String erstelltVon) {
@@ -71,5 +75,13 @@ public class BandController {
 
     public List<ActivityLogEntry> getActivityLog() {
         return bandService.aktivitaetslogAnzeigen();
+    }
+
+    public ExportJob requestCsvExport(String benutzer) {
+        return exportRequestService.exportAnfordern(benutzer);
+    }
+
+    public List<String> getExportJobs() {
+        return exportRequestService.exportJobsAnzeigen();
     }
 }

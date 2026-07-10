@@ -1,8 +1,12 @@
-# Module
+# Module (erstellt durch Codex)
 
 Dieses Dokument beschreibt die wichtigsten Module der Bandshirt-Datenbank. Ein
 Modul ist ein klar abgegrenzter Teil der Anwendung mit einer bestimmten
 Aufgabe.
+
+Neu ist: Die Anwendung besteht nicht mehr nur aus Frontend, Backend und
+Datenbankbeschreibung. Es gibt jetzt zusaetzlich einen getrennten
+Export-Service. Dadurch wird die Anwendung als verteilte Anwendung erkennbar.
 
 ## Frontend-Modul
 
@@ -34,15 +38,31 @@ Das Frontend kann im aktuellen Prototyp:
 - die komplette Bandliste als CSV oder XLS exportieren
 - einen einfachen angemeldeten Nutzer simulieren
 
-Der angemeldete Nutzer wird aktuell ueber ein Eingabefeld im Kopfbereich
-gesetzt. Dieser Name wird automatisch als Ersteller oder Bearbeiter verwendet.
-Spaeter koennte diese Stelle durch ein echtes Login ersetzt werden.
+Das Frontend ist weiterhin bewusst einfach. Spaeter koennte es Export-Anfragen
+an das Backend senden, statt den Export direkt im Browser zu erzeugen.
 
-## Backend-Modul
+## Backend/API-Modul
 
 Pfad: `backend/src/main/java/bandshirt/`
 
-Das Backend enthaelt die Java-Klassen. Es ist in vier Unterbereiche aufgeteilt.
+Das Backend/API-Modul ist Prozess 1 der verteilten Anwendung. Es verwaltet die
+Bands und nimmt Export-Anfragen entgegen.
+
+Das Backend ist in mehrere Bereiche aufgeteilt:
+
+- Controller
+- Service
+- Repository
+- Model
+
+### Startklasse
+
+- `BackendApiApplication`
+
+Diese Klasse zeigt den Backend/API-Prozess als eigenes startbares Programm. In
+einer echten Anwendung wuerde sie einen Webserver starten. Im einfachen
+Prototyp legt sie Beispieldaten an und schreibt einen Export-Auftrag in die
+gemeinsame Job-Datei.
 
 ## Controller
 
@@ -58,8 +78,7 @@ Webanwendung wuerde er HTTP-Anfragen vom Frontend entgegennehmen.
 ### Aufgabe
 
 Der `BandController` stellt Methoden bereit, die spaeter REST-Endpunkten
-entsprechen koennten. Er enthaelt selbst moeglichst wenig Logik und leitet die
-Arbeit an den `BandService` weiter.
+entsprechen koennten.
 
 Beispiele:
 
@@ -69,28 +88,48 @@ Beispiele:
 - Band loeschen
 - Bands suchen, filtern und sortieren
 - Aktivitaetslog anzeigen
+- CSV-Export anfordern
+- Export-Jobs anzeigen
+
+Beim Export erstellt der Controller nicht selbst die CSV-Datei. Er leitet die
+Anfrage an den `ExportRequestService` weiter.
 
 ## Service
 
 Pfad: `backend/src/main/java/bandshirt/service/`
 
-Der Service enthaelt die fachliche Logik der Anwendung.
+Services enthalten die fachliche Logik der Anwendung.
 
-### Klasse
+### Klassen
 
 - `BandService`
+- `ExportRequestService`
 
-### Aufgabe
+### Aufgabe von `BandService`
 
-Der `BandService` entscheidet, was bei einer Aktion passieren soll. Er prueft
-Pflichtfelder, aendert Banddaten und erzeugt Logeintraege fuer wichtige
-Aenderungen.
+Der `BandService` entscheidet, was bei Aktionen mit Bands passieren soll.
 
 Beispiele:
 
-- Beim Anlegen einer Band wird ein Logeintrag erstellt.
-- Beim Bearbeiten werden alte und neue Werte im Log festgehalten.
-- Bei Suche, Filter und Sortierung wird die passende Bandliste erzeugt.
+- Pflichtfelder pruefen
+- Band anlegen
+- Band bearbeiten
+- Band loeschen
+- Suche, Filter und Sortierung ausfuehren
+- Logeintraege vorbereiten
+
+### Aufgabe von `ExportRequestService`
+
+Der `ExportRequestService` ist fuer Export-Anfragen im Backend zustaendig.
+
+Er macht drei Dinge:
+
+1. Er liest die aktuelle Bandliste ueber den `BandService`.
+2. Er erstellt daraus einen einfachen Snapshot mit Bandname und Status.
+3. Er schreibt einen Export-Auftrag in die gemeinsame Job-Datei.
+
+Der Service erzeugt also nur einen Auftrag. Die eigentliche CSV-Datei erzeugt
+spaeter der getrennte Export-Service.
 
 ## Repository
 
@@ -104,15 +143,23 @@ Repositories sind fuer das Speichern und Laden von Daten zustaendig.
 - `InMemoryBandRepository`
 - `ActivityLogRepository`
 - `InMemoryActivityLogRepository`
+- `ExportJobRepository`
+- `ExportJobFileRepository`
 
 ### Aufgabe
 
-Die Interfaces beschreiben, welche Speicherfunktionen gebraucht werden. Die
-In-Memory-Klassen setzen diese Funktionen fuer den ersten Prototyp um.
+Die Band- und ActivityLog-Repositories speichern Daten im aktuellen Prototyp im
+Arbeitsspeicher.
 
-In-Memory bedeutet: Die Daten werden nur im Arbeitsspeicher gespeichert. Nach
-einem Neustart waeren sie weg. Spaeter koennte man diese Klassen durch echte
-Datenbank-Repositories ersetzen.
+Das `ExportJobFileRepository` speichert Export-Auftraege dagegen in einer
+Datei:
+
+```text
+shared/export-jobs.csv
+```
+
+Diese Datei ist die einfache Kommunikationsschnittstelle zwischen Backend und
+Export-Service.
 
 ## Model
 
@@ -126,6 +173,8 @@ Model-Klassen beschreiben die Datenobjekte der Anwendung.
 - `ActivityLogEntry`
 - `ResearchStatus`
 - `BandSortierung`
+- `ExportJob`
+- `ExportJobStatus`
 
 ### Aufgabe
 
@@ -146,6 +195,68 @@ Aenderungsinformationen.
 - BANDNAME
 - LETZTE_AENDERUNG
 - STATUS
+
+`ExportJob` beschreibt einen Export-Auftrag.
+
+`ExportJobStatus` enthaelt die moeglichen Zustaende eines Export-Auftrags:
+
+- OFFEN
+- IN_ARBEIT
+- ERLEDIGT
+- FEHLER
+
+## Export-Service-Modul
+
+Pfad: `export-service/`
+
+Der Export-Service ist Prozess 2 der verteilten Anwendung. Er laeuft getrennt
+vom Backend/API-Prozess.
+
+### Klasse
+
+- `ExportServiceApplication`
+
+### Aufgabe
+
+Der Export-Service liest offene Auftraege aus:
+
+```text
+shared/export-jobs.csv
+```
+
+Wenn ein Auftrag den Status `OFFEN` hat, erstellt der Export-Service eine CSV
+mit diesen Spalten:
+
+- Bandname
+- Status
+
+Danach schreibt er die CSV-Datei nach:
+
+```text
+shared/exports/
+```
+
+Anschliessend markiert er den Auftrag in der Job-Datei als `ERLEDIGT`.
+
+## Shared-Modul
+
+Pfad: `shared/`
+
+Dieser Ordner ist kein eigener Prozess, sondern ein gemeinsamer
+Austauschbereich.
+
+### Dateien und Ordner
+
+- `export-jobs.csv`
+- `exports/`
+
+### Aufgabe
+
+Das Backend schreibt Export-Jobs in `export-jobs.csv`. Der Export-Service liest
+diese Datei und schreibt fertige Export-Dateien in `exports/`.
+
+Damit ist `shared/` die einfache Kommunikationsstelle zwischen den beiden
+Prozessen.
 
 ## Datenbank-Modul
 

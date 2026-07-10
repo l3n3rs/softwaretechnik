@@ -1,4 +1,4 @@
-# Datenmodell
+# Datenmodell (erstellt durch Codex)
 
 Dieses Dokument beschreibt die wichtigsten Daten der Bandshirt-Datenbank. Das
 Datenmodell zeigt, welche Informationen im System gespeichert werden sollen und

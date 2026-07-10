@@ -1,21 +1,28 @@
-# Architektur
+# Architektur (erstellt durch Codex)
 
-Dieses Projekt ist als einfache verteilte Anwendung aufgebaut. Das bedeutet:
-Die Anwendung besteht nicht aus einer einzigen grossen Datei, sondern aus
-mehreren getrennten Bereichen mit klaren Aufgaben.
+Dieses Projekt ist jetzt bewusst als einfache verteilte Anwendung aufgebaut.
+Wichtig ist dabei nicht nur die Trennung in Frontend, Backend und Datenbank,
+sondern vor allem die Trennung in mindestens zwei Prozesse.
 
-## Grundidee der Architektur
+Ein Prozess ist ein eigenstaendig laufendes Programm. Wenn zwei Prozesse
+getrennt laufen und trotzdem Daten austauschen, entsteht eine verteilte
+Anwendung.
 
-Die Bandshirt-Datenbank ist in drei technische Hauptbereiche aufgeteilt:
+## Warum ist das jetzt eine verteilte Anwendung?
 
-- Frontend
-- Backend
-- Datenbank
+Die Anwendung besteht aus zwei getrennten Java-Prozessen:
 
-Diese Trennung ist wichtig, weil jeder Bereich eine andere Aufgabe hat. Das
-Frontend ist fuer die Anzeige und Bedienung da. Das Backend enthaelt die
-Programmlogik. Die Datenbank beschreibt, wie die Informationen dauerhaft
-gespeichert werden sollen.
+- Prozess 1: Backend/API
+- Prozess 2: Export-Service
+
+Diese Prozesse haben unterschiedliche Aufgaben und koennen getrennt gestartet
+werden. Sie kommunizieren nicht durch direkte Methodenaufrufe, sondern ueber
+eine gemeinsame Datei.
+
+Das ist eine sehr einfache Form verteilter Kommunikation. In grossen Systemen
+wuerde man dafuer oft eine Datenbank, eine Message Queue oder einen externen
+Dienst verwenden. Fuer dieses Studienprojekt reicht eine Job-Datei, weil sie
+leicht zu verstehen und zu erklaeren ist.
 
 ## Architekturuebersicht
 
@@ -28,88 +35,118 @@ HTML, CSS, JavaScript
    |
    | spaeter: REST-Aufrufe
    v
-Backend
-Java: Controller, Service, Repository, Model
+Prozess 1: Backend/API
+Bandverwaltung und Export-Anfrage
    |
-   | spaeter: SQL-Zugriff
+   | schreibt Export-Auftrag
    v
-Datenbank
-Tabellen fuer Bands, Namen, Quellen und Aktivitaetslog
+shared/export-jobs.csv
+gemeinsame Job-Datei
+   |
+   | liest offene Export-Auftraege
+   v
+Prozess 2: Export-Service
+erstellt CSV-Dateien
+   |
+   v
+shared/exports/
+fertige Export-Dateien
 ```
 
-Im aktuellen Stand ist das Frontend noch nicht technisch mit dem Backend
-verbunden. Das ist fuer dieses Studienprojekt bewusst in Ordnung. Ziel ist
-zuerst, die Struktur und die Verantwortlichkeiten zu verstehen.
+## Prozess 1: Backend/API
 
-## Frontend
+Der Backend/API-Prozess ist fuer die eigentliche Bandverwaltung zustaendig.
 
-Das Frontend liegt im Ordner `frontend/`.
+Aufgaben:
 
-Es besteht aus:
+- Bands anlegen
+- Bands anzeigen
+- Bands bearbeiten
+- Bands loeschen
+- Bands suchen, filtern und sortieren
+- Aktivitaetslog vorbereiten
+- Export-Anfragen entgegennehmen
+- Export-Auftraege in die Job-Datei schreiben
 
-- `index.html`: Struktur der Oberflaeche
-- `css/`: Gestaltung der Oberflaeche
-- `js/app.js`: Logik im Browser
+Wichtig: Das Backend erstellt die Export-Datei nicht selbst. Es schreibt nur
+einen Auftrag. Dadurch bleibt das Backend frei fuer seine Hauptaufgabe: die
+Verwaltung der Banddaten.
 
-Das Frontend kann im aktuellen Prototyp bereits Bands anzeigen, anlegen,
-suchen, filtern, sortieren, bearbeiten, loeschen und exportieren. Die Daten
-werden dabei noch im Browser gespeichert. Spaeter wuerde das Frontend die Daten
-ueber REST-Schnittstellen vom Backend laden.
+## Prozess 2: Export-Service
 
-## Backend
+Der Export-Service ist ein eigener Prozess im Ordner `export-service/`.
 
-Das Backend liegt im Ordner `backend/`.
+Aufgaben:
 
-Es ist in mehrere Schichten aufgeteilt:
+- Job-Datei lesen
+- offene Export-Auftraege finden
+- zu jedem offenen Auftrag eine CSV-Datei erstellen
+- den Auftrag danach als erledigt markieren
 
-- Controller
-- Service
-- Repository
-- Model
+Der Export-Service kann unabhaengig vom Backend gestartet werden. Er arbeitet
+die Jobs ab, die vorher vom Backend geschrieben wurden.
 
-Diese Schichten machen den Code uebersichtlich. Jede Schicht hat eine eigene
-Aufgabe und muss nicht alles ueber die anderen Schichten wissen.
+## Kommunikation zwischen den Prozessen
 
-## Datenbank
+Die Prozesse kommunizieren ueber diese Datei:
 
-Das Datenmodell liegt im Ordner `database/` in der Datei `schema.sql`.
+```text
+shared/export-jobs.csv
+```
 
-Darin wird beschrieben, welche Tabellen spaeter gebraucht werden:
+Das Backend schreibt dort neue Export-Auftraege hinein. Ein Auftrag enthaelt
+zum Beispiel:
 
-- `bands`
-- `sekundaere_bandnamen`
-- `quellen`
-- `activity_log`
+- Job-ID
+- Status
+- Benutzer
+- Erstellungszeit
+- Ziel-Datei
+- Snapshot der Bandnamen und Statuswerte
 
-Im aktuellen Java-Code werden die Daten noch nicht in einer echten Datenbank
-gespeichert. Stattdessen gibt es einfache In-Memory-Repositories. Diese
-speichern Daten nur zur Laufzeit im Arbeitsspeicher. Das macht den ersten Code
-leichter verstaendlich.
+Der Export-Service liest dieselbe Datei. Wenn er einen Auftrag mit dem Status
+`OFFEN` findet, verarbeitet er ihn und setzt den Status danach auf `ERLEDIGT`.
 
-## Warum diese Architektur sinnvoll ist
+Die erzeugten Export-Dateien liegen hier:
 
-Die Trennung in Frontend, Backend und Datenbank hilft beim Verstehen und
-Erweitern der Anwendung.
+```text
+shared/exports/
+```
 
-Das Frontend kann geaendert werden, ohne die Java-Logik direkt anzufassen. Das
-Backend kann Regeln pruefen, ohne vom Layout der Webseite abzuhaengen. Die
-Datenbank kann spaeter angebunden oder ausgetauscht werden, ohne die gesamte
-Oberflaeche neu zu schreiben.
+## Warum ist der Export-Service getrennt vom Backend?
 
-Fuer ein Studienprojekt ist diese Struktur besonders sinnvoll, weil man daran
-gut erklaeren kann, wie verteilte Anwendungen aufgebaut sind.
+Der Export ist eine Aufgabe, die getrennt von der normalen Bandverwaltung
+ablaufen kann. Das hat mehrere Vorteile:
 
-## Geplanter Datenfluss
+- Das Backend muss nicht warten, bis eine Export-Datei fertig geschrieben ist.
+- Der Export kann spaeter auch groessere Datenmengen verarbeiten.
+- Der Export-Service kann bei Bedarf getrennt gestartet, gestoppt oder ersetzt werden.
+- Die Architektur zeigt klar, wie zwei Prozesse zusammenarbeiten.
 
-Ein spaeterer Ablauf beim Anlegen einer Band koennte so aussehen:
+Fuer das Studienprojekt ist diese Trennung besonders hilfreich, weil man daran
+gut erklaeren kann, was eine verteilte Anwendung ausmacht.
 
-1. Der Benutzer fuellt im Frontend das Formular aus.
-2. Das Frontend sendet die Daten per REST an das Backend.
-3. Der Controller nimmt die Anfrage entgegen.
-4. Der Service prueft die Daten und erstellt eine Band.
-5. Das Repository speichert die Band.
-6. Die Datenbank haelt die Band dauerhaft fest.
-7. Das Backend meldet dem Frontend das Ergebnis zurueck.
+## Einfacher Ablauf eines Exports
 
-Aktuell ist dieser Ablauf teilweise vorbereitet, aber noch nicht vollstaendig
-technisch verbunden.
+1. Ein Benutzer fordert im Backend einen CSV-Export an.
+2. Das Backend liest die aktuelle Bandliste.
+3. Das Backend schreibt einen neuen Auftrag in `shared/export-jobs.csv`.
+4. Der Export-Service wird getrennt gestartet.
+5. Der Export-Service liest die Job-Datei.
+6. Der Export-Service findet offene Jobs.
+7. Der Export-Service erstellt eine CSV-Datei mit Bandname und Status.
+8. Der Export-Service markiert den Job als erledigt.
+
+## Bewusst einfache Umsetzung
+
+Die Umsetzung ist absichtlich einfach gehalten:
+
+- keine echte REST-Implementierung
+- keine echte Datenbankanbindung
+- keine Message Queue
+- keine Nebenlaeufigkeit
+- keine komplexe Fehlerbehandlung
+
+Der Schwerpunkt liegt darauf, die verteilte Architektur zu verstehen. Deshalb
+wird die Kommunikation ueber Dateien geloest. Das ist technisch nicht die
+modernste Loesung, aber fuer ein Lernprojekt sehr gut nachvollziehbar.
