@@ -1,10 +1,10 @@
 # Architektur (erstellt durch Codex)
 
-Dieses Projekt ist jetzt bewusst als einfache verteilte Anwendung aufgebaut.
+Dieses Projekt ist als einfache verteilte Anwendung aufgebaut.
 Wichtig ist dabei nicht nur die Trennung in Frontend, Backend und Datenbank,
 sondern vor allem die Trennung in mindestens zwei Prozesse.
 
-Ein Prozess ist ein eigenstaendig laufendes Programm. Wenn zwei Prozesse
+Ein Prozess ist ein eigenständig laufendes Programm. Wenn zwei Prozesse
 getrennt laufen und trotzdem Daten austauschen, entsteht eine verteilte
 Anwendung.
 
@@ -22,7 +22,7 @@ eine gemeinsame Datei.
 Das ist eine sehr einfache Form verteilter Kommunikation. In grossen Systemen
 wuerde man dafuer oft eine Datenbank, eine Message Queue oder einen externen
 Dienst verwenden. Fuer dieses Studienprojekt reicht eine Job-Datei, weil sie
-leicht zu verstehen und zu erklaeren ist.
+leicht zu verstehen und zu erklären ist.
 
 ## Architekturuebersicht
 
@@ -33,7 +33,7 @@ Benutzer
 Frontend
 HTML, CSS, JavaScript
    |
-   | spaeter: REST-Aufrufe
+   | später: REST-Aufrufe
    v
 Prozess 1: Backend/API
 Bandverwaltung und Export-Anfrage
@@ -43,7 +43,7 @@ Bandverwaltung und Export-Anfrage
 shared/export-jobs.csv
 gemeinsame Job-Datei
    |
-   | liest offene Export-Auftraege
+   | liest offene Export-Aufträge
    v
 Prozess 2: Export-Service
 erstellt CSV-Dateien
@@ -55,7 +55,7 @@ fertige Export-Dateien
 
 ## Prozess 1: Backend/API
 
-Der Backend/API-Prozess ist fuer die eigentliche Bandverwaltung zustaendig.
+Der Backend/API-Prozess ist für die eigentliche Bandverwaltung zuständig.
 
 Aufgaben:
 
@@ -64,9 +64,9 @@ Aufgaben:
 - Bands bearbeiten
 - Bands loeschen
 - Bands suchen, filtern und sortieren
-- Aktivitaetslog vorbereiten
+- Aktivitätslog vorbereiten
 - Export-Anfragen entgegennehmen
-- Export-Auftraege in die Job-Datei schreiben
+- Export-Aufträge in die Job-Datei schreiben
 
 Wichtig: Das Backend erstellt die Export-Datei nicht selbst. Es schreibt nur
 einen Auftrag. Dadurch bleibt das Backend frei fuer seine Hauptaufgabe: die
@@ -79,22 +79,22 @@ Der Export-Service ist ein eigener Prozess im Ordner `export-service/`.
 Aufgaben:
 
 - Job-Datei lesen
-- offene Export-Auftraege finden
+- offene Export-Aufträge finden
 - zu jedem offenen Auftrag eine CSV-Datei erstellen
 - den Auftrag danach als erledigt markieren
 
-Der Export-Service kann unabhaengig vom Backend gestartet werden. Er arbeitet
+Der Export-Service kann unabhängig vom Backend gestartet werden. Er arbeitet
 die Jobs ab, die vorher vom Backend geschrieben wurden.
 
 ## Kommunikation zwischen den Prozessen
 
-Die Prozesse kommunizieren ueber diese Datei:
+Die Prozesse kommunizieren über diese Datei:
 
 ```text
 shared/export-jobs.csv
 ```
 
-Das Backend schreibt dort neue Export-Auftraege hinein. Ein Auftrag enthaelt
+Das Backend schreibt dort neue Export-Aufträge hinein. Ein Auftrag enthält
 zum Beispiel:
 
 - Job-ID
@@ -119,12 +119,12 @@ Der Export ist eine Aufgabe, die getrennt von der normalen Bandverwaltung
 ablaufen kann. Das hat mehrere Vorteile:
 
 - Das Backend muss nicht warten, bis eine Export-Datei fertig geschrieben ist.
-- Der Export kann spaeter auch groessere Datenmengen verarbeiten.
+- Der Export kann später auch grössere Datenmengen verarbeiten.
 - Der Export-Service kann bei Bedarf getrennt gestartet, gestoppt oder ersetzt werden.
 - Die Architektur zeigt klar, wie zwei Prozesse zusammenarbeiten.
 
-Fuer das Studienprojekt ist diese Trennung besonders hilfreich, weil man daran
-gut erklaeren kann, was eine verteilte Anwendung ausmacht.
+Fr das Studienprojekt ist diese Trennung besonders hilfreich, weil man daran
+gutü erklären kann, was eine verteilte Anwendung ausmacht.
 
 ## Einfacher Ablauf eines Exports
 
@@ -144,9 +144,9 @@ Die Umsetzung ist absichtlich einfach gehalten:
 - keine echte REST-Implementierung
 - keine echte Datenbankanbindung
 - keine Message Queue
-- keine Nebenlaeufigkeit
+- keine Nebenläufigkeit
 - keine komplexe Fehlerbehandlung
 
 Der Schwerpunkt liegt darauf, die verteilte Architektur zu verstehen. Deshalb
-wird die Kommunikation ueber Dateien geloest. Das ist technisch nicht die
-modernste Loesung, aber fuer ein Lernprojekt sehr gut nachvollziehbar.
+wird die Kommunikation über Dateien gelöst. Das ist technisch nicht die
+modernste Lösung, aber für ein Lernprojekt sehr gut nachvollziehbar.

@@ -2,8 +2,8 @@ package bandshirt.model;
 
 /**
  * Warum gibt es diese Klasse?
- * Ein Export-Auftrag kann verschiedene Zustaende haben. Diese Enum-Klasse
- * sammelt die erlaubten Zustaende an einer Stelle.
+ * Ein Export-Auftrag kann verschiedene Zustände haben. Diese Enum-Klasse
+ * sammelt die erlaubten Zustände an einer Stelle.
  *
  * Aufgabe im System:
  * Der Status zeigt, ob ein Export noch wartet, gerade verarbeitet wird oder

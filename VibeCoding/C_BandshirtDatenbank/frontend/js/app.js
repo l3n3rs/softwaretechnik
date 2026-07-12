@@ -1,12 +1,12 @@
 // Diese Datei enthaelt die einfache Frontend-Logik der Bandshirt-Datenbank.
 //
-// Wichtig fuer das Studienprojekt:
+// Wichtig für das Studienprojekt:
 // Das Frontend arbeitet in diesem ersten Schritt noch ohne echtes Backend.
 // Die Daten werden nur in einem JavaScript-Array gespeichert. Dadurch kann man
 // die Bedienung verstehen, bevor spaeter REST-Aufrufe zum Java-Backend
 // eingebaut werden.
 
-// Dieses Objekt uebersetzt die technischen Statuswerte in gut lesbare Texte.
+// Dieses Objekt übersetzt die technischen Statuswerte in gut lesbare Texte.
 // Der technische Wert "GRUEN" passt zum Java-Enum ResearchStatus im Backend.
 const statusTexte = {
   GRUEN: "gruen",
@@ -16,11 +16,11 @@ const statusTexte = {
 };
 
 // Diese Reihenfolge nutzen wir beim Sortieren nach Status. So ist die Anzeige
-// nachvollziehbar und nicht zufaellig alphabetisch.
+// nachvollziehbar und nicht zufällig alphabetisch.
 const statusReihenfolge = ["GRUEN", "GELB", "ROT", "UNRECHERCHIERT"];
 
-// bands ist unsere vorlaeufige "Datenquelle" im Browser.
-// Spaeter wuerde diese Liste nicht mehr direkt hier stehen, sondern ueber eine
+// bands ist unsere vorläufige "Datenquelle" im Browser.
+// Später würde diese Liste nicht mehr direkt hier stehen, sondern über eine
 // REST-API aus dem Backend geladen werden.
 const bands = [
   {
@@ -29,7 +29,7 @@ const bands = [
     secondaryNames: ["Demo Name", "Testprojekt"],
     researchStatus: "UNRECHERCHIERT",
     sources: ["https://example.org"],
-    comment: "Erster Beispieldatensatz fuer die Oberflaeche.",
+    comment: "Erster Beispieldatensatz fuer die Oberfläche.",
     createdBy: "System",
     lastChangedAt: new Date(),
     lastChangedBy: "System"
@@ -43,13 +43,13 @@ let selectedBandId = 1;
 // editMode merkt sich, ob die Detailansicht gerade als Formular angezeigt wird.
 let editMode = false;
 
-// nextId ist ein einfacher Zaehler fuer neue Bands. In einer echten Datenbank
-// wuerde die ID normalerweise von der Datenbank erzeugt.
+// nextId ist ein einfacher Zähler für neue Bands. In einer echten Datenbank
+// würde die ID normalerweise von der Datenbank erzeugt.
 let nextId = 2;
 
 // Hier werden die HTML-Elemente gesucht, mit denen JavaScript arbeiten muss.
 // querySelector gibt jeweils das erste passende Element aus der HTML-Datei
-// zurueck.
+// zurück.
 const form = document.querySelector("#band-form");
 const bandList = document.querySelector("#band-list");
 const bandDetail = document.querySelector("#band-detail");
@@ -70,10 +70,10 @@ form.addEventListener("submit", (event) => {
   const formData = new FormData(form);
   const currentUser = getCurrentUser();
 
-  // Dieses Objekt hat bewusst aehnliche Felder wie die Java-Klasse Band.
-  // So erkennt man leicht, wie Frontend und Backend spaeter zusammenpassen.
+  // Dieses Objekt hat bewusst ähnliche Felder wie die Java-Klasse Band.
+  // So erkennt man leicht, wie Frontend und Backend später zusammenpassen.
   // createdBy und lastChangedBy werden automatisch aus dem aktuellen Nutzer
-  // gesetzt. Genau das wuerde spaeter ein echtes Login-System liefern.
+  // gesetzt. Genau das wuerde später ein echtes Login-System liefern.
   const band = {
     id: nextId,
     primaryName: formData.get("primaryName").trim(),
@@ -95,7 +95,7 @@ form.addEventListener("submit", (event) => {
 });
 
 // Suche, Filter und Sortierung sollen sofort reagieren, wenn sich ein Feld
-// aendert. Darum rufen alle drei Steuerelemente wieder render() auf.
+// ändert. Darum rufen alle drei Steuerelemente wieder render() auf.
 searchInput.addEventListener("input", render);
 statusFilter.addEventListener("change", render);
 sortSelect.addEventListener("change", render);
@@ -103,7 +103,7 @@ sortSelect.addEventListener("change", render);
 // Die Export-Buttons erzeugen Dateien direkt im Browser.
 // CSV ist eine Textdatei fuer Tabellenprogramme.
 // XLS wird hier als einfache HTML-Tabelle mit .xls-Endung erzeugt, die Excel
-// und viele andere Tabellenprogramme oeffnen koennen.
+// und viele andere Tabellenprogramme öffnen können.
 exportCsvButton.addEventListener("click", exportBandsAsCsv);
 exportXlsButton.addEventListener("click", exportBandsAsXls);
 
@@ -145,7 +145,7 @@ function getCurrentUser() {
 }
 
 // Aus einem Text wie "Name 1, Name 2" wird eine Liste ["Name 1", "Name 2"].
-// Leere Eintraege werden entfernt, damit spaeter keine unsauberen Daten
+// Leere Einträge werden entfernt, damit später keine unsauberen Daten
 // angezeigt werden.
 function splitCommaList(value) {
   return value
@@ -154,21 +154,21 @@ function splitCommaList(value) {
     .filter((entry) => entry.length > 0);
 }
 
-// render ist die zentrale Zeichenfunktion fuer die Oberflaeche.
-// Sie aktualisiert Liste, Detailansicht und Zaehler.
+// render ist die zentrale Zeichenfunktion fuer die Oberfläche.
+// Sie aktualisiert Liste, Detailansicht und Zähler.
 function render() {
   const visibleBands = getVisibleBands();
 
   renderBandList(visibleBands);
   renderBandDetail();
 
-  // Der Zaehler zeigt sowohl die sichtbaren Treffer als auch die Gesamtzahl.
+  // Der Zähler zeigt sowohl die sichtbaren Treffer als auch die Gesamtzahl.
   // Das ist hilfreich, wenn Suche oder Filter aktiv sind.
   bandCount.textContent = `${visibleBands.length} von ${bands.length} Bands`;
 }
 
 // Diese Funktion kombiniert Suche, Filter und Sortierung.
-// Wichtig: Das originale bands-Array wird nicht veraendert. Wir erzeugen eine
+// Wichtig: Das originale bands-Array wird nicht verändert. Wir erzeugen eine
 // neue Ergebnisliste und sortieren nur diese Anzeige-Liste.
 function getVisibleBands() {
   const searchTerm = searchInput.value.trim().toLowerCase();
@@ -184,8 +184,8 @@ function getVisibleBands() {
   return sortBands(result, selectedSort);
 }
 
-// Eine Band passt zur Suche, wenn der Suchtext im primaeren Namen oder in einem
-// sekundaeren Namen vorkommt. Gross- und Kleinschreibung wird ignoriert.
+// Eine Band passt zur Suche, wenn der Suchtext im primären Namen oder in einem
+// sekundären Namen vorkommt. Gross- und Kleinschreibung wird ignoriert.
 function matchesSearch(band, searchTerm) {
   if (searchTerm.length === 0) {
     return true;
@@ -243,7 +243,7 @@ function renderBandList(visibleBands) {
       <div class="meta-line">Letzte Aenderung: ${formatDate(band.lastChangedAt)}</div>
       <div class="card-actions">
         <button type="button" data-action="show" data-id="${band.id}">Anzeigen</button>
-        <button type="button" class="delete-button" data-action="delete" data-id="${band.id}">Loeschen</button>
+        <button type="button" class="delete-button" data-action="delete" data-id="${band.id}">Löschen</button>
       </div>
     `;
 
@@ -276,7 +276,7 @@ bandList.addEventListener("click", (event) => {
   render();
 });
 
-// Loescht eine Band aus dem Array. Spaeter waere das ein DELETE-Aufruf an das
+// Löscht eine Band aus dem Array. Spaeter waere das ein DELETE-Aufruf an das
 // Backend, zum Beispiel DELETE /bands/{id}.
 function deleteBand(id) {
   const index = bands.findIndex((band) => band.id === id);
@@ -309,7 +309,7 @@ function renderBandDetail() {
   }
 }
 
-// Normale Leseansicht fuer die Details einer Band.
+// Normale Leseansicht für die Details einer Band.
 function renderBandReadView(band) {
   bandDetail.innerHTML = `
     <dl>
@@ -319,7 +319,7 @@ function renderBandReadView(band) {
       <dd>${escapeHtml(formatList(band.secondaryNames))}</dd>
       <dt>Status</dt>
       <dd>${statusTexte[band.researchStatus]}</dd>
-      <dt>Quellen</dt>
+      <dt>Qüllen</dt>
       <dd>${escapeHtml(formatList(band.sources))}</dd>
       <dt>Kommentar</dt>
       <dd>${escapeHtml(band.comment || "-")}</dd>
@@ -334,8 +334,8 @@ function renderBandReadView(band) {
   `;
 }
 
-// Bearbeitungsformular fuer die Detailansicht.
-// Die Felder werden mit den aktuellen Werten der ausgewaehlten Band gefuellt.
+// Bearbeitungsformular für die Detailansicht.
+// Die Felder werden mit den aktuellen Werten der ausgewaehlten Band gefüllt.
 function renderBandEditForm(band) {
   bandDetail.innerHTML = `
     <form id="detail-edit-form" class="edit-form">
@@ -353,7 +353,7 @@ function renderBandEditForm(band) {
         Recherche-Status
         <select name="researchStatus">
           <option value="UNRECHERCHIERT" ${selectedIf(band.researchStatus, "UNRECHERCHIERT")}>unrecherchiert</option>
-          <option value="GRUEN" ${selectedIf(band.researchStatus, "GRUEN")}>gruen</option>
+          <option value="GRUEN" ${selectedIf(band.researchStatus, "GRUEN")}>grün</option>
           <option value="GELB" ${selectedIf(band.researchStatus, "GELB")}>gelb</option>
           <option value="ROT" ${selectedIf(band.researchStatus, "ROT")}>rot</option>
         </select>
@@ -381,7 +381,7 @@ function renderBandEditForm(band) {
   `;
 }
 
-// Speichert die Werte aus dem Detailformular zurueck in das Band-Objekt.
+// Speichert die Werte aus dem Detailformular zurück in das Band-Objekt.
 // Danach wird die letzte Aenderung automatisch mit Nutzer und Zeitpunkt gesetzt.
 function saveDetailEdit(formData) {
   const band = bands.find((entry) => entry.id === selectedBandId);
@@ -403,7 +403,7 @@ function saveDetailEdit(formData) {
 }
 
 // Exportiert die komplette Bandliste als CSV-Datei.
-// CSV steht fuer "Comma-Separated Values"; hier verwenden wir Semikolon als
+// CSV steht für "Comma-Separated Values"; hier verwenden wir Semikolon als
 // Trennzeichen, weil deutsche Tabellenprogramme damit oft besser umgehen.
 function exportBandsAsCsv() {
   const rows = [
@@ -419,8 +419,8 @@ function exportBandsAsCsv() {
 }
 
 // Exportiert die komplette Bandliste als einfache XLS-Datei.
-// Technisch ist das eine HTML-Tabelle mit .xls-Endung. Fuer ein Studienprojekt
-// ist das gut nachvollziehbar und ohne externe Bibliothek moeglich.
+// Technisch ist das eine HTML-Tabelle mit .xls-Endung. Für ein Studienprojekt
+// ist das gut nachvollziehbar und ohne externe Bibliothek möglich.
 function exportBandsAsXls() {
   const headerCells = getExportHeader()
     .map((cell) => `<th>${escapeHtml(cell)}</th>`)
@@ -450,7 +450,7 @@ function exportBandsAsXls() {
   downloadFile("bandshirt-datenbank.xls", "application/vnd.ms-excel;charset=utf-8", xlsContent);
 }
 
-// Kopfzeile fuer beide Exportformate.
+// Kopfzeile für beide Exportformate.
 function getExportHeader() {
   return [
     "ID",
@@ -460,12 +460,12 @@ function getExportHeader() {
     "Quellen",
     "Kommentar",
     "Erstellt von",
-    "Letzte Aenderung am",
-    "Letzte Aenderung von"
+    "Letzte Änderung am",
+    "Letzte Änderung von"
   ];
 }
 
-// Datenzeile fuer beide Exportformate.
+// Datenzeile für beide Exportformate.
 function getExportRow(band) {
   return [
     String(band.id),
@@ -493,8 +493,8 @@ function downloadFile(fileName, mimeType, content) {
   URL.revokeObjectURL(url);
 }
 
-// Eine CSV-Zelle muss in Anfuehrungszeichen stehen, wenn sie Sonderzeichen wie
-// Semikolon, Zeilenumbrueche oder Anfuehrungszeichen enthaelt.
+// Eine CSV-Zelle muss in Anführungszeichen stehen, wenn sie Sonderzeichen wie
+// Semikolon, Zeilenumbrüche oder Anführungszeichen enthaelt.
 function escapeCsvCell(value) {
   const text = String(value ?? "");
   const escapedText = text.replaceAll('"', '""');
@@ -506,19 +506,19 @@ function formatList(values) {
   return values.length > 0 ? values.join(", ") : "-";
 }
 
-// Formatiert ein Date-Objekt fuer die deutsche Anzeige.
+// Formatiert ein Date-Objekt für die deutsche Anzeige.
 function formatDate(value) {
   return value.toLocaleString("de-DE");
 }
 
-// Hilfsfunktion fuer option-Elemente im Bearbeitungsformular.
+// Hilfsfunktion für option-Elemente im Bearbeitungsformular.
 function selectedIf(currentValue, optionValue) {
   return currentValue === optionValue ? "selected" : "";
 }
 
-// Diese Funktion schuetzt Text, der in HTML eingefuegt wird.
+// Diese Funktion schützt Text, der in HTML eingefügt wird.
 // Beispiel: Aus <script> wird harmloser Text, der nur angezeigt und nicht
-// ausgefuehrt wird.
+// ausgeführt wird.
 function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -528,7 +528,7 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-// Diese Funktion schuetzt Werte, die in HTML-Attribute geschrieben werden.
+// Diese Funktion schützt Werte, die in HTML-Attribute geschrieben werden.
 // Sie verwendet dieselbe Ersetzung wie escapeHtml, ist aber als eigener Name
 // leichter zu verstehen, wenn man den Formular-Code liest.
 function escapeAttribute(value) {

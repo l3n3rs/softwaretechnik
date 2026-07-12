@@ -4,15 +4,15 @@ Dieses Dokument beschreibt die wichtigsten Module der Bandshirt-Datenbank. Ein
 Modul ist ein klar abgegrenzter Teil der Anwendung mit einer bestimmten
 Aufgabe.
 
-Neu ist: Die Anwendung besteht nicht mehr nur aus Frontend, Backend und
-Datenbankbeschreibung. Es gibt jetzt zusaetzlich einen getrennten
+Die Anwendung besteht nicht nur aus Frontend, Backend und
+Datenbankbeschreibung. Es gibt zusätzlich einen getrennten
 Export-Service. Dadurch wird die Anwendung als verteilte Anwendung erkennbar.
 
 ## Frontend-Modul
 
 Pfad: `frontend/`
 
-Das Frontend ist die Benutzeroberflaeche. Hier arbeitet der Benutzer direkt mit
+Das Frontend ist die Benutzeroberfläche. Hier arbeitet der Benutzer direkt mit
 der Anwendung.
 
 ### Dateien
@@ -30,15 +30,15 @@ Das Frontend kann im aktuellen Prototyp:
 - Bands anlegen
 - Bands anzeigen
 - Bands in der Detailansicht bearbeiten
-- Bands loeschen
-- nach primaerem Bandnamen suchen
-- nach sekundaeren Bandnamen suchen
+- Bands löschen
+- nach primärem Bandnamen suchen
+- nach sekundären Bandnamen suchen
 - nach Recherche-Status filtern
-- nach Bandname, letzter Aenderung oder Status sortieren
+- nach Bandname, letzter Änderung oder Status sortieren
 - die komplette Bandliste als CSV oder XLS exportieren
 - einen einfachen angemeldeten Nutzer simulieren
 
-Das Frontend ist weiterhin bewusst einfach. Spaeter koennte es Export-Anfragen
+Das Frontend ist weiterhin bewusst einfach. Später koennte es Export-Anfragen
 an das Backend senden, statt den Export direkt im Browser zu erzeugen.
 
 ## Backend/API-Modul
@@ -60,7 +60,7 @@ Das Backend ist in mehrere Bereiche aufgeteilt:
 - `BackendApiApplication`
 
 Diese Klasse zeigt den Backend/API-Prozess als eigenes startbares Programm. In
-einer echten Anwendung wuerde sie einen Webserver starten. Im einfachen
+einer echten Anwendung würde sie einen Webserver starten. Im einfachen
 Prototyp legt sie Beispieldaten an und schreibt einen Export-Auftrag in die
 gemeinsame Job-Datei.
 
@@ -69,7 +69,7 @@ gemeinsame Job-Datei.
 Pfad: `backend/src/main/java/bandshirt/controller/`
 
 Der Controller ist die Eingangsschicht des Backends. In einer echten
-Webanwendung wuerde er HTTP-Anfragen vom Frontend entgegennehmen.
+Webanwendung würde er HTTP-Anfragen vom Frontend entgegennehmen.
 
 ### Klasse
 
@@ -77,17 +77,17 @@ Webanwendung wuerde er HTTP-Anfragen vom Frontend entgegennehmen.
 
 ### Aufgabe
 
-Der `BandController` stellt Methoden bereit, die spaeter REST-Endpunkten
-entsprechen koennten.
+Der `BandController` stellt Methoden bereit, die später REST-Endpunkten
+entsprechen könnten.
 
 Beispiele:
 
 - Band anlegen
 - Band anzeigen
 - Band bearbeiten
-- Band loeschen
+- Band löschen
 - Bands suchen, filtern und sortieren
-- Aktivitaetslog anzeigen
+- Aktivitätslog anzeigen
 - CSV-Export anfordern
 - Export-Jobs anzeigen
 
@@ -114,28 +114,28 @@ Beispiele:
 - Pflichtfelder pruefen
 - Band anlegen
 - Band bearbeiten
-- Band loeschen
-- Suche, Filter und Sortierung ausfuehren
-- Logeintraege vorbereiten
+- Band löschen
+- Suche, Filter und Sortierung ausführen
+- Logeinträge vorbereiten
 
 ### Aufgabe von `ExportRequestService`
 
-Der `ExportRequestService` ist fuer Export-Anfragen im Backend zustaendig.
+Der `ExportRequestService` ist für Export-Anfragen im Backend zuständig.
 
 Er macht drei Dinge:
 
-1. Er liest die aktuelle Bandliste ueber den `BandService`.
+1. Er liest die aktuelle Bandliste über den `BandService`.
 2. Er erstellt daraus einen einfachen Snapshot mit Bandname und Status.
 3. Er schreibt einen Export-Auftrag in die gemeinsame Job-Datei.
 
 Der Service erzeugt also nur einen Auftrag. Die eigentliche CSV-Datei erzeugt
-spaeter der getrennte Export-Service.
+später der getrennte Export-Service.
 
 ## Repository
 
 Pfad: `backend/src/main/java/bandshirt/repository/`
 
-Repositories sind fuer das Speichern und Laden von Daten zustaendig.
+Repositories sind für das Speichern und Laden von Daten zuständig.
 
 ### Klassen und Interfaces
 
@@ -151,7 +151,7 @@ Repositories sind fuer das Speichern und Laden von Daten zustaendig.
 Die Band- und ActivityLog-Repositories speichern Daten im aktuellen Prototyp im
 Arbeitsspeicher.
 
-Das `ExportJobFileRepository` speichert Export-Auftraege dagegen in einer
+Das `ExportJobFileRepository` speichert Export-Aufträge dagegen in einer
 Datei:
 
 ```text
@@ -179,18 +179,18 @@ Model-Klassen beschreiben die Datenobjekte der Anwendung.
 ### Aufgabe
 
 `Band` beschreibt eine Band mit Namen, Status, Quellen, Kommentar und
-Aenderungsinformationen.
+Änderungsinformationen.
 
-`ActivityLogEntry` beschreibt einen Eintrag im Aktivitaetslog.
+`ActivityLogEntry` beschreibt einen Eintrag im Aktivitätslog.
 
-`ResearchStatus` enthaelt die erlaubten Recherche-Status:
+`ResearchStatus` enthält die erlaubten Recherche-Status:
 
 - GRUEN
 - GELB
 - ROT
 - UNRECHERCHIERT
 
-`BandSortierung` enthaelt die erlaubten Sortierarten:
+`BandSortierung` enthält die erlaubten Sortierarten:
 
 - BANDNAME
 - LETZTE_AENDERUNG
@@ -198,7 +198,7 @@ Aenderungsinformationen.
 
 `ExportJob` beschreibt einen Export-Auftrag.
 
-`ExportJobStatus` enthaelt die moeglichen Zustaende eines Export-Auftrags:
+`ExportJobStatus` enthält die moeglichen Zustände eines Export-Auftrags:
 
 - OFFEN
 - IN_ARBEIT
@@ -209,7 +209,7 @@ Aenderungsinformationen.
 
 Pfad: `export-service/`
 
-Der Export-Service ist Prozess 2 der verteilten Anwendung. Er laeuft getrennt
+Der Export-Service ist Prozess 2 der verteilten Anwendung. Er läuft getrennt
 vom Backend/API-Prozess.
 
 ### Klasse
@@ -218,7 +218,7 @@ vom Backend/API-Prozess.
 
 ### Aufgabe
 
-Der Export-Service liest offene Auftraege aus:
+Der Export-Service liest offene Aufträge aus:
 
 ```text
 shared/export-jobs.csv
@@ -262,16 +262,16 @@ Prozessen.
 
 Pfad: `database/`
 
-Das Datenbank-Modul enthaelt die Datei `schema.sql`.
+Das Datenbank-Modul enthält die Datei `schema.sql`.
 
-Diese Datei beschreibt, welche Tabellen spaeter in einer relationalen Datenbank
+Diese Datei beschreibt, welche Tabellen später in einer relationalen Datenbank
 angelegt werden koennten.
 
 ## Dokumentations-Modul
 
 Pfad: `docs/`
 
-Die Dokumentation erklaert das Projekt Schritt fuer Schritt.
+Die Dokumentation erklärt das Projekt Schritt fuer Schritt.
 
 Wichtige Dokumente sind:
 
@@ -282,4 +282,4 @@ Wichtige Dokumente sind:
 - Fazit
 
 Die Dokumentation ist fuer dieses Studienprojekt besonders wichtig, weil der
-Code nicht nur funktionieren, sondern auch verstanden und erklaert werden soll.
+Code nicht nur funktionieren, sondern auch verstanden und erklärt werden soll.

@@ -1,166 +1,616 @@
 <!DOCTYPE html>
+
 <!--
-    Diese Datei ist die Startseite des Frontends.
+    Diese Datei ist die Startseite des Frontends der Bandshirt-Datenbank.
 
-    Sie enthaelt nur die sichtbare Struktur der Anwendung:
-    - Formular zum Anlegen einer Band
-    - Such-, Filter- und Sortierbereich
-    - Bandliste
-    - Detailansicht
+    HTML beschreibt grundsätzlich die sichtbare Struktur einer Webseite.
+    In dieser Datei wird also festgelegt:
 
-    Die eigentliche Logik steht in frontend/js/app.js.
-    Das Aussehen steht in frontend/css/globals.css und den vorhandenen
-    Style-Dateien.
+    - welche Überschriften angezeigt werden,
+    - welche Eingabefelder vorhanden sind,
+    - welche Buttons es gibt,
+    - wo die Bandliste erscheint,
+    - und wo die Detailansicht angezeigt wird.
+
+    Wichtig:
+    HTML übernimmt hier hauptsächlich die Struktur.
+
+    Die eigentliche Programmlogik befindet sich in:
+
+    frontend/js/app.js
+
+    Dort wird zum Beispiel festgelegt:
+
+    - was beim Speichern einer Band passiert,
+    - wie gesucht und gefiltert wird,
+    - wie die Bandkarten erzeugt werden,
+    - und wie die Detailansicht gefüllt wird.
+
+    Das Aussehen der Seite wird über CSS-Dateien gesteuert:
+
+    - frontend/css/fonts.css
+    - frontend/css/theme.css
+    - frontend/css/globals.css
 -->
+
 <html lang="de">
 
+<!--
+    Das Attribut lang="de" teilt dem Browser mit,
+    dass der Inhalt der Seite auf Deutsch geschrieben ist.
+
+    Das ist unter anderem wichtig für:
+
+    - Screenreader,
+    - automatische Übersetzungen,
+    - Suchmaschinen,
+    - und die korrekte Aussprache durch Hilfsprogramme.
+-->
+
 <head>
-    <!-- UTF-8 erlaubt Umlaute. Im Code verwenden wir trotzdem meistens ae/oe/ue,
-         damit die Dateien in verschiedenen Editoren robust lesbar bleiben. -->
+
+    <!--
+        Der head-Bereich enthält Informationen über die Webseite,
+        die normalerweise nicht direkt als Inhalt auf der Seite erscheinen.
+
+        Dazu gehören zum Beispiel:
+
+        - Zeichencodierung,
+        - Titel der Browser-Registerkarte,
+        - Einstellungen für mobile Geräte,
+        - und Verweise auf CSS-Dateien.
+    -->
+
+    <!--
+        UTF-8 ist die verwendete Zeichencodierung.
+
+        Dadurch können Zeichen wie:
+
+        - ä
+        - ö
+        - ü
+        - ß
+
+        korrekt dargestellt werden.
+
+        Ohne diese Angabe könnten Umlaute in manchen Browsern
+        oder Editoren falsch angezeigt werden.
+    -->
     <meta charset="UTF-8">
 
-    <!-- Diese Zeile sorgt dafuer, dass die Seite auch auf kleinen Bildschirmen
-         nicht wie eine Desktop-Seite herausgezoomt wird. -->
+    <!--
+        Diese Einstellung ist besonders für Smartphones und Tablets wichtig.
+
+        width=device-width bedeutet:
+        Die Breite der Webseite soll sich an der tatsächlichen Breite
+        des verwendeten Geräts orientieren.
+
+        initial-scale=1.0 bedeutet:
+        Die Seite soll beim Öffnen mit normaler Vergrößerung angezeigt werden.
+
+        Ohne diese Zeile könnte die Seite auf einem Smartphone
+        sehr klein oder stark herausgezoomt erscheinen.
+    -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!--
+        Der Inhalt des title-Elements erscheint:
+
+        - im Browser-Tab,
+        - in der Browser-Historie,
+        - und als Standardname beim Speichern eines Lesezeichens.
+    -->
     <title>Bandshirt-Datenbank</title>
 
-    <!-- Die CSS-Dateien werden getrennt geladen:
-         fonts.css: Schriften
-         theme.css: Farben und Design-Variablen
-         globals.css: konkrete Layout-Regeln fuer diese HTML-Seite -->
+    <!--
+        Mit link werden externe CSS-Dateien eingebunden.
+
+        CSS bestimmt das Aussehen der HTML-Elemente.
+
+        rel="stylesheet" bedeutet:
+        Die verknüpfte Datei ist ein Stylesheet.
+
+        href enthält den Pfad zur jeweiligen CSS-Datei.
+    -->
+
+    <!--
+        fonts.css enthält Einstellungen für die verwendeten Schriftarten.
+    -->
     <link rel="stylesheet" href="css/fonts.css">
+
+    <!--
+        theme.css enthält allgemeine Designwerte,
+        zum Beispiel Farben oder wiederverwendbare Variablen.
+
+        Dadurch können Farben an einer zentralen Stelle geändert werden.
+    -->
     <link rel="stylesheet" href="css/theme.css">
+
+    <!--
+        globals.css enthält die konkreten Layout- und Darstellungsregeln
+        für die Elemente dieser Seite.
+
+        Dort wird zum Beispiel festgelegt:
+
+        - wie breit die Spalten sind,
+        - wie Buttons aussehen,
+        - wie Abstände gesetzt werden,
+        - und wie Bandkarten dargestellt werden.
+    -->
     <link rel="stylesheet" href="css/globals.css">
 </head>
 
 <body>
-    <!-- Kopfbereich der Anwendung. Er zeigt Name, Prototyp-Status und den
-         aktuell angemeldeten Nutzer. In einer echten Anwendung kaeme dieser
-         Nutzername spaeter aus einem Login-System. -->
+
+    <!--
+        Der body-Bereich enthält alle sichtbaren Inhalte der Webseite.
+    -->
+
+    <!--
+        Der header ist der Kopfbereich der Anwendung.
+
+        Er enthält:
+
+        - die Bezeichnung des Systems,
+        - den Namen der Anwendung,
+        - das Eingabefeld für den aktuellen Nutzer,
+        - und einen Hinweis, dass es sich um einen Frontend-Prototyp handelt.
+    -->
     <header class="app-header">
+
+        <!--
+            Dieses div gruppiert die kleine Überschrift
+            und den eigentlichen Haupttitel.
+        -->
         <div>
+
+            <!--
+                Die Klasse eyebrow wird vermutlich im CSS verwendet,
+                um diesen Text kleiner oder dezenter darzustellen.
+
+                Inhaltlich zeigt er, zu welchem Bereich die Anwendung gehört.
+            -->
             <p class="eyebrow">Vereinsverwaltung</p>
+
+            <!--
+                h1 ist die wichtigste Überschrift der gesamten Seite.
+
+                Pro Seite sollte es normalerweise nur eine Hauptüberschrift geben.
+            -->
             <h1>Bandshirt-Datenbank</h1>
         </div>
+
+        <!--
+            Dieser Bereich enthält die Angaben zum angemeldeten Nutzer
+            und den Prototyp-Hinweis.
+        -->
         <div class="user-area">
+
+            <!--
+                label verbindet eine sichtbare Beschriftung
+                mit einem Eingabefeld.
+
+                Dadurch wird klar, wofür das Eingabefeld gedacht ist.
+            -->
             <label>
                 Angemeldeter Nutzer
+
+                <!--
+                    Dieses Eingabefeld enthält den Namen des aktuell verwendeten Nutzers.
+
+                    id="current-user" ist wichtig,
+                    weil JavaScript später gezielt auf dieses Feld zugreifen kann.
+
+                    type="text" bedeutet:
+                    Es handelt sich um ein normales Texteingabefeld.
+
+                    value="Max Muster" ist der voreingestellte Beispielwert.
+
+                    In einer echten Anwendung würde dieser Name normalerweise
+                    aus einem Login-System stammen.
+                -->
                 <input id="current-user" type="text" value="Max Muster">
             </label>
+
+            <!--
+                Dieser Hinweis zeigt,
+                dass es sich aktuell um einen Prototyp handelt.
+
+                Die Klasse system-badge dient vermutlich dazu,
+                den Hinweis optisch wie ein kleines Etikett darzustellen.
+            -->
             <span class="system-badge">Frontend Prototyp</span>
         </div>
     </header>
 
-    <!-- Hauptbereich mit drei Spalten: Formular, Liste und Detailansicht. -->
+    <!--
+        main enthält den eigentlichen Hauptinhalt der Anwendung.
+
+        Die Klasse app-layout sorgt vermutlich dafür,
+        dass die Inhalte in mehreren Spalten angeordnet werden.
+
+        Diese Seite besteht aus drei Bereichen:
+
+        1. Band anlegen
+        2. Bandübersicht
+        3. Detailansicht
+    -->
     <main class="app-layout">
-        <!-- Linke Spalte: Hier werden neue Bands angelegt. -->
+
+        <!-- =========================================================
+             LINKE SPALTE: NEUE BAND ANLEGEN
+             ========================================================= -->
+
+        <!--
+            section kennzeichnet einen inhaltlich zusammengehörigen Bereich.
+
+            Die Klasse panel sorgt vermutlich für die optische Darstellung
+            als abgegrenzte Fläche oder Karte.
+        -->
         <section class="panel">
+
+            <!--
+                Dieser Bereich bildet den Kopf des Panels.
+            -->
             <div class="panel-header">
+
+                <!--
+                    h2 ist eine Überschrift der zweiten Ebene.
+
+                    Sie beschreibt den Inhalt dieses Abschnitts.
+                -->
                 <h2>Band anlegen</h2>
             </div>
 
-            <!-- Das Formular wird in app.js abgefangen. Die Seite wird beim
-                 Speichern also nicht neu geladen. -->
+            <!--
+                Das Formular dient zum Erstellen einer neuen Band.
+
+                id="band-form" ermöglicht es JavaScript,
+                das Formular gezielt auszuwählen.
+
+                class="band-form" wird für die Gestaltung im CSS verwendet.
+
+                Beim Abschicken des Formulars greift app.js ein.
+                Dort wird verhindert, dass die Seite neu geladen wird.
+            -->
             <form id="band-form" class="band-form">
+
+                <!--
+                    Eingabefeld für den Hauptnamen der Band.
+                -->
                 <label>
-                    Primaerer Bandname
+                    Primärer Bandname
+
+                    <!--
+                        id:
+                        JavaScript kann dieses konkrete Feld finden.
+
+                        name:
+                        Gibt dem Feld einen fachlichen Namen.
+                        Das wäre auch bei einer klassischen Formularübertragung wichtig.
+
+                        type="text":
+                        Normales Texteingabefeld.
+
+                        required:
+                        Das Feld muss ausgefüllt werden,
+                        bevor das Formular abgeschickt werden kann.
+
+                        placeholder:
+                        Zeigt einen Beispieltext an,
+                        solange noch nichts eingegeben wurde.
+                    -->
                     <input id="primary-name" name="primaryName" type="text" required placeholder="z. B. Beispielband">
                 </label>
 
+                <!--
+                    Eingabefeld für alternative oder frühere Bandnamen.
+
+                    Mehrere Namen werden hier in einem einzigen Feld eingetragen
+                    und durch Kommas getrennt.
+                -->
                 <label>
-                    Sekundaere Bandnamen
+                    Sekundäre Bandnamen
+
                     <input id="secondary-names" name="secondaryNames" type="text" placeholder="durch Komma trennen">
                 </label>
 
+                <!--
+                    Auswahlfeld für den aktuellen Recherche-Status.
+                -->
                 <label>
                     Recherche-Status
+
+                    <!--
+                        select erzeugt eine Auswahlliste.
+
+                        Der gespeicherte Wert kommt aus dem value-Attribut
+                        der ausgewählten option.
+                    -->
                     <select id="research-status" name="researchStatus">
-                        <option value="UNRECHERCHIERT">unrecherchiert</option>
-                        <option value="GRUEN">gruen</option>
-                        <option value="GELB">gelb</option>
-                        <option value="ROT">rot</option>
+
+                        <!--
+                            Diese Werte werden in Großbuchstaben gespeichert,
+                            weil sie sich gut als feste technische Statuswerte eignen.
+
+                            Sichtbar ist trotzdem die deutsche Bezeichnung.
+                        -->
+                        <option value="UNRECHERCHIERT">
+                            unrecherchiert
+                        </option>
+
+                        <option value="GRUEN">
+                            grün
+                        </option>
+
+                        <option value="GELB">
+                            gelb
+                        </option>
+
+                        <option value="ROT">
+                            rot
+                        </option>
                     </select>
                 </label>
 
+                <!--
+                    Eingabefeld für Quellen oder Links.
+
+                    Mehrere Links werden durch Kommas getrennt eingegeben.
+                -->
                 <label>
                     Quellen / Links
+
                     <input id="sources" name="sources" type="text" placeholder="durch Komma trennen">
                 </label>
 
+                <!--
+                    Größeres Texteingabefeld für einen Kommentar.
+
+                    textarea eignet sich für längere Texte besser als input.
+                -->
                 <label>
                     Kommentar
+
+                    <!--
+                        rows="4" bedeutet,
+                        dass das Feld ungefähr vier Textzeilen hoch angezeigt wird.
+
+                        Die tatsächliche Größe kann zusätzlich durch CSS verändert werden.
+                    -->
                     <textarea id="comment" name="comment" rows="4" placeholder="Kurze Notiz zur Recherche"></textarea>
                 </label>
 
-                <!-- Der Ersteller wird nicht mehr manuell eingegeben.
-                     app.js nimmt automatisch den Namen aus #current-user. -->
-                <button type="submit">Band speichern</button>
+                <!--
+                    Der Ersteller der Band wird nicht über ein zusätzliches Feld eingegeben.
+
+                    Stattdessen liest JavaScript den Namen aus dem Feld
+                    mit der ID current-user aus.
+                -->
+
+                <!--
+                    type="submit" bedeutet:
+                    Dieser Button schickt das Formular ab.
+
+                    JavaScript reagiert anschließend auf das submit-Ereignis.
+                -->
+                <button type="submit">
+                    Band speichern
+                </button>
             </form>
         </section>
 
-        <!-- Mittlere Spalte: Hier werden Bands gesucht, gefiltert, sortiert
-             und als Liste angezeigt. -->
+        <!-- =========================================================
+             MITTLERE SPALTE: BANDÜBERSICHT
+             ========================================================= -->
+
         <section class="panel">
+
+            <!--
+                Kopfbereich der Bandübersicht.
+            -->
             <div class="panel-header">
-                <h2>Banduebersicht</h2>
-                <span id="band-count" class="counter">0 Bands</span>
+
+                <h2>Bandübersicht</h2>
+
+                <!--
+                    Dieser Zähler zeigt die Anzahl der aktuell angezeigten Bands.
+
+                    JavaScript ersetzt den Anfangswert "0 Bands"
+                    später durch die tatsächliche Anzahl.
+                -->
+                <span id="band-count" class="counter">
+                    0 Bands
+                </span>
             </div>
 
-            <!-- Die Steuerelemente veraendern nur die angezeigte Liste.
-                 Die gespeicherten Bands selbst bleiben unveraendert. -->
+            <!--
+                Dieser Bereich enthält alle Steuerelemente,
+                die die sichtbare Liste beeinflussen.
+
+                Dazu gehören:
+
+                - Suche,
+                - Statusfilter,
+                - Sortierung,
+                - Export.
+            -->
             <div class="list-controls">
+
+                <!--
+                    Suchfeld für primäre und sekundäre Bandnamen.
+                -->
                 <label>
                     Suche nach Bandnamen
-                    <input id="search-input" type="search" placeholder="primaerer oder sekundaerer Name">
+
+                    <!--
+                        type="search" ist speziell für Suchfelder gedacht.
+
+                        Manche Browser zeigen dadurch zusätzlich
+                        ein kleines Symbol zum Leeren des Feldes an.
+                    -->
+                    <input id="search-input" type="search" placeholder="primärer oder sekundärer Name">
                 </label>
 
+                <!--
+                    Filtert die sichtbare Bandliste nach Status.
+                -->
                 <label>
                     Status filtern
+
                     <select id="status-filter">
-                        <option value="ALLE">alle Status</option>
-                        <option value="UNRECHERCHIERT">unrecherchiert</option>
-                        <option value="GRUEN">gruen</option>
-                        <option value="GELB">gelb</option>
-                        <option value="ROT">rot</option>
+
+                        <!--
+                            ALLE bedeutet:
+                            Es sollen Bands mit jedem Status sichtbar sein.
+                        -->
+                        <option value="ALLE">
+                            alle Status
+                        </option>
+
+                        <option value="UNRECHERCHIERT">
+                            unrecherchiert
+                        </option>
+
+                        <option value="GRUEN">
+                            grün
+                        </option>
+
+                        <option value="GELB">
+                            gelb
+                        </option>
+
+                        <option value="ROT">
+                            rot
+                        </option>
                     </select>
                 </label>
 
+                <!--
+                    Auswahlfeld für die Reihenfolge der Bandliste.
+                -->
                 <label>
                     Sortieren nach
+
                     <select id="sort-select">
-                        <option value="BANDNAME">Bandname alphabetisch</option>
-                        <option value="LETZTE_AENDERUNG">letzter Aenderung</option>
-                        <option value="STATUS">Status</option>
+
+                        <!--
+                            BANDNAME:
+                            alphabetische Sortierung nach dem primären Bandnamen.
+                        -->
+                        <option value="BANDNAME">
+                            Bandname alphabetisch
+                        </option>
+
+                        <!--
+                            LETZTE_AENDERUNG:
+                            Sortierung nach dem Zeitpunkt der letzten Änderung.
+                        -->
+                        <option value="LETZTE_AENDERUNG">
+                            letzter Änderung
+                        </option>
+
+                        <!--
+                            STATUS:
+                            Sortierung nach Recherche-Status.
+                        -->
+                        <option value="STATUS">
+                            Status
+                        </option>
                     </select>
                 </label>
 
-                <!-- Exportiert die komplette gespeicherte Liste, nicht nur die
-                     aktuell gefilterte Ansicht. -->
+                <!--
+                    Dieser Bereich gruppiert die beiden Export-Buttons.
+                -->
                 <div class="export-actions">
-                    <button id="export-csv" type="button">CSV exportieren</button>
-                    <button id="export-xls" type="button">XLS exportieren</button>
+
+                    <!--
+                        type="button" ist wichtig.
+
+                        Ohne diese Angabe könnte ein Button innerhalb eines Formulars
+                        versehentlich als Absende-Button behandelt werden.
+
+                        Dieser Button soll einen CSV-Export starten.
+                    -->
+                    <button id="export-csv" type="button">
+                        CSV exportieren
+                    </button>
+
+                    <!--
+                        Dieser Button soll einen XLS-Export starten.
+                    -->
+                    <button id="export-xls" type="button">
+                        XLS exportieren
+                    </button>
                 </div>
             </div>
 
-            <!-- app.js erzeugt die Karten in diesem Container dynamisch. -->
+            <!--
+                Dieser Container ist zunächst leer.
+
+                app.js erstellt später für jede Band
+                eine sichtbare Karte oder einen Listeneintrag
+                und fügt ihn hier ein.
+
+                Das nennt man dynamisches Erzeugen von HTML.
+            -->
             <div id="band-list" class="band-list"></div>
         </section>
 
-        <!-- Rechte Spalte: Detailansicht fuer die aktuell ausgewaehlte Band. -->
+        <!-- =========================================================
+             RECHTE SPALTE: DETAILANSICHT
+             ========================================================= -->
+
+        <!--
+            Dieses Panel zeigt die Daten der aktuell ausgewählten Band.
+
+            Die zusätzliche Klasse detail-panel kann für besondere
+            Layout-Regeln verwendet werden.
+        -->
         <section class="panel detail-panel">
+
             <div class="panel-header">
                 <h2>Detailansicht</h2>
             </div>
+
+            <!--
+                Zu Beginn wurde noch keine Band ausgewählt.
+
+                Deshalb zeigt dieser Bereich zunächst einen Hinweistext.
+
+                app.js ersetzt den Inhalt später durch echte Banddaten.
+
+                Die Klasse empty-state kann verwendet werden,
+                um diesen leeren Zustand optisch anders darzustellen.
+            -->
             <div id="band-detail" class="band-detail empty-state">
-                Noch keine Band ausgewaehlt.
+                Noch keine Band ausgewählt.
             </div>
         </section>
     </main>
 
-    <!-- JavaScript wird am Ende geladen, damit die HTML-Elemente vorher schon
-         existieren und per document.querySelector gefunden werden koennen. -->
+    <!--
+        Die JavaScript-Datei wird ganz am Ende des body-Bereichs eingebunden.
+
+        Das hat einen wichtigen Vorteil:
+
+        Der Browser hat zu diesem Zeitpunkt alle HTML-Elemente bereits gelesen.
+
+        Dadurch kann app.js sofort mit document.querySelector()
+        auf Elemente wie:
+
+        - #band-form
+        - #band-list
+        - #band-detail
+
+        zugreifen.
+
+        Würde JavaScript zu früh geladen,
+        könnten diese Elemente zu diesem Zeitpunkt noch nicht existieren.
+    -->
     <script src="js/app.js"></script>
+
 </body>
 
 </html>

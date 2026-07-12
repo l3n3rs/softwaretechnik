@@ -2,7 +2,7 @@ package bandshirt.model;
 
 /**
  * Warum gibt es diese Klasse?
- * Diese Enum-Klasse sammelt die erlaubten Sortierungen fuer die Bandliste.
+ * Diese Enum-Klasse sammelt die erlaubten Sortierungen für die Bandliste.
  *
  * Aufgabe im System:
  * Statt freie Texte wie "name", "datum" oder "status" im Service zu verteilen,

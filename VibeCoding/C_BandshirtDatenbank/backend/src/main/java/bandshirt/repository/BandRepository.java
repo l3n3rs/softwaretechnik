@@ -10,12 +10,12 @@ import java.util.Optional;
  * Das Repository trennt den restlichen Java-Code von der konkreten Speicherung.
  *
  * Aufgabe im System:
- * Diese Schnittstelle beschreibt, welche Speicher-Aktionen fuer Bands gebraucht
- * werden: speichern, suchen, auflisten und loeschen.
+ * Diese Schnittstelle beschreibt, welche Speicher-Aktionen für Bands gebraucht
+ * werden: speichern, suchen, auflisten und löschen.
  *
  * Zusammenarbeit:
  * Der BandService verwendet BandRepository. Die konkrete Klasse
- * InMemoryBandRepository setzt diese Schnittstelle fuer den ersten Prototyp um.
+ * InMemoryBandRepository setzt diese Schnittstelle für den ersten Prototyp um.
  */
 public interface BandRepository {
     Band save(Band band);

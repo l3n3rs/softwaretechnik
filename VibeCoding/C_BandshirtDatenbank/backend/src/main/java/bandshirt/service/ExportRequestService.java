@@ -56,7 +56,7 @@ public class ExportRequestService {
 
     private void pruefeBenutzer(String benutzer) {
         if (benutzer == null || benutzer.isBlank()) {
-            throw new IllegalArgumentException("Der Benutzer fuer den Export darf nicht leer sein.");
+            throw new IllegalArgumentException("Der Benutzer für den Export darf nicht leer sein.");
         }
     }
 }
